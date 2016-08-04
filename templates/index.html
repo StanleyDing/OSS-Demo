@@ -1,0 +1,75 @@
+<!doctype html>
+
+<h4>Create a new addrese</h4>
+<form action='/address' method='post'>
+    Random seed:<br>
+    <input type='text' name='message' size='100'><br><br>
+    <input type='submit' value='Submit'>
+</form>
+
+<hr>
+
+<h4>Get address balance</h4>
+<form action='/balance' method='get'>
+    Address:<br>
+    <input type='text' name='address' size='50'><br><br>
+    <input type='submit' value='Submit'>
+</form>
+
+<hr>
+
+<h4>Create a new license</h4>
+<form action='/license' method='post'>
+    Address:<br>
+    <input type='text' name='address' size='50'><br>
+    Color:<br>
+    <input type='text' name='color_id' size='40'><br>
+    Name:<br>
+    <input type='text' name='name' size='40'><br>
+    Description:<br>
+    <input type='text' name='description' size='80'><br>
+    Metadata link:<br>
+    <input type='text' name='metadata_link' size='40'><br><br>
+    <input type='submit' value='Submit'>
+</form>
+
+<hr>
+
+<h4>Mint</h4>
+<form action='/mint' method='post'>
+    Address:<br>
+    <input type='text' name='mint_address' size='50'><br>
+    Color:<br>
+    <input type='text' name='color_id' size='40'><br>
+    Amount:<br>
+    <input type='text' name='amount' size='40'><br>
+    Private key:<br>
+    <input type='text' name='priv' size='80'><br><br>
+    <input type='submit' value='Submit'>
+</form>
+
+<hr>
+
+<h4>Send money</h4>
+<form action='/send' method='post'>
+    From address:<br>
+    <input type='text' name='from_address' size='50'><br>
+    To address:<br>
+    <input type='text' name='to_address' size='50'><br>
+    Color:<br>
+    <input type='text' name='color_id' size='40'><br>
+    Amount:<br>
+    <input type='text' name='amount' size='40'><br>
+    Private key:<br>
+    <input type='text' name='priv' size='80'><br><br>
+    <input type='submit' value='Submit'>
+</form>
+
+<br><br><br>
+
+<h4>Note:</h4>
+<ul>
+    <li>Send money would consume one color 1. Make sure your address has color 1 before sending money.</li>
+    <li>License is controlled by owner. It means that you can only send money to the address which the license owner has sent to before.</li>
+    <li>Since the application has no database yet, you need to record the created address and its private key by yourself.</li>
+</ul>
