@@ -1,4 +1,5 @@
 import requests
+import urllib
 
 from flask import Flask, request, render_template
 
@@ -7,15 +8,18 @@ from gcoin import *
 
 app = Flask(__name__)
 
-BASE_URL = 'http://store1.diqi.us:9876'
-
-
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('endpoint.html')
 
-@app.route('/address', methods=['POST'])
-def address():
+@app.route('/<path:oss_endpoint>')
+def oss(oss_endpoint):
+    # encode the url
+    oss_endpoint = urllib.quote(oss_endpoint, safe='')
+    return render_template('index.html', oss_endpoint=oss_endpoint)
+
+@app.route('/<path:oss_endpoint>/address', methods=['POST'])
+def address(oss_endpoint):
     message = request.form.get('message')
     print message
 
@@ -30,18 +34,18 @@ def address():
     }
     return render_template('new_address.html', **address_response)
 
-@app.route('/balance', methods=['GET'])
-def balance():
+@app.route('/<path:oss_endpoint>/balance', methods=['GET'])
+def balance(oss_endpoint):
     address = request.args.get('address')
 
     # get address balance
-    url = BASE_URL + '/base/v1/balance/%s' % address
+    url = urllib.unquote(oss_endpoint).decode('utf8') + '/base/v1/balance/%s' % address
     response = requests.get(url)
     balance_dict = response.json()
     return render_template('balance.html', data=balance_dict)
 
-@app.route('/license', methods=['POST'])
-def license():
+@app.route('/<path:oss_endpoint>/license', methods=['POST'])
+def license(oss_endpoint):
     address = request.form.get('address')
     color_id = request.form.get('color_id')
     name = request.form.get('name')
@@ -57,12 +61,12 @@ def license():
         'metadata_link': metadata_link,
         'member_control': 'False'
     }
-    url = BASE_URL + '/base/v1/license/create'
+    url = urllib.unquote(oss_endpoint).decode('utf8') + '/base/v1/license/create'
     response = requests.get(url, params=payload)
     return response.json()['tx_id']
 
-@app.route('/mint', methods=['POST'])
-def mint():
+@app.route('/<path:oss_endpoint>/mint', methods=['POST'])
+def mint(oss_endpoint):
     mint_address = request.form.get('mint_address')
     color_id = request.form.get('color_id')
     amount = request.form.get('amount')
@@ -74,7 +78,7 @@ def mint():
         'color_id': color_id,
         'amount': amount
     }
-    url = BASE_URL + '/base/v1/mint/create'
+    url = urllib.unquote(oss_endpoint).decode('utf8') + '/base/v1/mint/create'
     response = requests.get(url, params=payload)
 
     # sign
@@ -82,12 +86,12 @@ def mint():
     signed_tx = signall(raw_tx, priv)
 
     # broadcast
-    url = BASE_URL + '/base/v1/mint/send'
+    url = urllib.unquote(oss_endpoint).decode('utf8') + '/base/v1/mint/send'
     response = requests.post(url, data={'raw_tx': signed_tx})
     return response.json()['tx_id']
 
-@app.route('/send', methods=['POST'])
-def send():
+@app.route('/<path:oss_endpoint>/send', methods=['POST'])
+def send(oss_endpoint):
     from_address = request.form.get('from_address')
     to_address = request.form.get('to_address')
     color_id = request.form.get('color_id')
@@ -101,7 +105,7 @@ def send():
         'color_id': color_id,
         'amount': amount
     }
-    url = BASE_URL + '/base/v1/transaction/create'
+    url = urllib.unquote(oss_endpoint).decode('utf8') + '/base/v1/transaction/create'
     response = requests.get(url, params=payload)
 
     # sign
@@ -109,7 +113,7 @@ def send():
     signed_tx = signall(raw_tx, priv)
 
     # broadcast
-    url = BASE_URL + '/base/v1/transaction/send'
+    url = urllib.unquote(oss_endpoint).decode('utf8') + '/base/v1/transaction/send'
     response = requests.post(url, data={'raw_tx': signed_tx})
     return response.json()['tx_id']
 

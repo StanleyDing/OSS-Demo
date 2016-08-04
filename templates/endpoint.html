@@ -1,0 +1,11 @@
+<!doctype html>
+
+OSS endpoint:<br>
+<input type='text' id='oss_endpoint' size='80' placeholder='http://store1.diqi.us:8787'><br><br>
+<input type='button' id='send_button' value='Submit' onclick='submit()'>
+
+<script>
+function submit() {
+    location.href += encodeURIComponent(document.getElementById("oss_endpoint").value);
+}
+</script>

@@ -4,7 +4,7 @@
 </head>
 <body>
     <h2>Create a new addrese</h2>
-    <form action='/address' method='post'>
+    <form action='/{{ oss_endpoint }}/address' method='post'>
         Random seed:<br>
         <input type='text' name='message' size='100'><br><br>
         <input type='submit' value='submit'>
@@ -14,7 +14,7 @@
     <hr>
 
     <h2>Get address balance</h2>
-    <form action='/balance' method='get'>
+    <form action='/{{ oss_endpoint }}/balance' method='get'>
         Address:<br>
         <input type='text' name='address' size='50'><br><br>
         <input type='submit' value='Submit'>
@@ -24,7 +24,7 @@
     <hr>
 
     <h2>Create a new license</h2>
-    <form action='/license' method='post'>
+    <form action='/{{ oss_endpoint }}/license' method='post'>
         Address:<br>
         <input type='text' name='address' size='50'><br>
         Color:<br>
@@ -42,7 +42,7 @@
     <hr>
 
     <h2>Mint</h2>
-    <form action='/mint' method='post'>
+    <form action='/{{ oss_endpoint }}/mint' method='post'>
         Address:<br>
         <input type='text' name='mint_address' size='50'><br>
         Color:<br>
@@ -58,7 +58,7 @@
     <hr>
 
     <h2>Send money</h2>
-    <form action='/send' method='post'>
+    <form action='/{{ oss_endpoint }}/send' method='post'>
         From address:<br>
         <input type='text' name='from_address' size='50'><br>
         To address:<br>
