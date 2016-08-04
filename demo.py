@@ -7,22 +7,28 @@ from gcoin import *
 
 app = Flask(__name__)
 
-BASE_URL = 'http://store1.diqi.us:8787'
+BASE_URL = 'http://store1.diqi.us:9876'
 
 
 @app.route('/')
-def index(name=None):
-    return render_template('index.html', name=name)
+def index():
+    return render_template('index.html')
 
 @app.route('/address', methods=['POST'])
 def address():
     message = request.form.get('message')
+    print message
 
     # create private key, public key, and address
     priv = sha256(str(message))
     pub = privtopub(priv)
     addr = pubtoaddr(pub)
-    return 'private key: ' + priv + '<br>public key: ' + pub + '<br>address: ' + addr
+    address_response = {
+        'priv': priv,
+        'pub': pub,
+        'addr': addr
+    }
+    return render_template('new_address.html', **address_response)
 
 @app.route('/balance', methods=['GET'])
 def balance():
@@ -48,7 +54,8 @@ def license():
         'color_id': color_id,
         'name': name,
         'description': description,
-        'metadata_link': metadata_link
+        'metadata_link': metadata_link,
+        'member_control': 'False'
     }
     url = BASE_URL + '/base/v1/license/create'
     response = requests.get(url, params=payload)

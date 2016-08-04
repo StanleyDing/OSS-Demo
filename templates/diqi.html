@@ -1,0 +1,49 @@
+<script type="text/javascript" src="http://crypto-js.googlecode.com/files/2.0.0-crypto-sha256.js"></script>
+<script type="text/javascript" src="http://crypto-js.googlecode.com/files/2.0.0-hmac-min.js"></script>
+<script type="text/javascript">
+function Authorization(method,url,body){
+	var API_key = "nnHdaug1Q8rDvYn6"
+	var secret = "fTiAXcnYpf71omjn7WTRdtKOPiIQhegE";
+	var path_url = url.substr(21)
+	var d = new Date();
+    var timestamp = Math.floor(d.getTime()/1000);
+	var key, post = '', cnt=0;
+	for(key in body){
+		if(cnt>0){
+			post = post.concat('&')
+		}
+		post = post.concat(key+'='+body[key]);
+		cnt++;
+	}
+
+	var message = method+path_url+post+timestamp;
+	document.write(message);
+	var signature = Crypto.HMAC(Crypto.SHA256, message, secret).toString(16);
+	var xhttp = new XMLHttpRequest();
+	xhttp.open(method, url, true);
+    xhttp.setRequestHeader("DIQI-ACCESS-KEY", API_key);
+    xhttp.setRequestHeader("DIQI-ACCESS-SIGNATURE", signature);
+    xhttp.setRequestHeader("DIQI-ACCESS-TIMESTAMP", timestamp);
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+		    document.write(xhttp.responseText);
+		}
+	};
+	//document.write(post);
+	xhttp.send(post);
+	
+}
+var url = "https://asset.diqi.us/api/v1/payments/";
+var url2 = "https://asset.diqi.us/api/v1/license/";
+var pay_body = {
+	"amount": "100",
+	"fee_address" : "1FJgzFWXiPw2PcQEpCRxuoqopQwciSz9ti",
+	"to_address": "1FJgzFWXiPw2PcQEpCRxuoqopQwciSz9ti",
+	"from_address" : "1MJhhuenZBnfZEM9oGEqWJ3SgiQ54FBswT",
+    "color_id": "1"
+    
+};
+
+Authorization("POST",url,pay_body);
+//Authorization("GET",url2+"?page=8","");
+</script>
